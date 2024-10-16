@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Submit API Link</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #f8f9fa;
+    }
+    .container {
+      max-width: 600px;
+      margin-top: 50px;
+    }
+    .form-container {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    .btn-submit {
+      background-color: #030405;
+      color: white;
+      transition: background-color 0.3s;
+    }
+    .btn-submit:hover {
+      background-color: #5b7ea4;
+    }
+    .result-container {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f1f1f1;
+      border-radius: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="form-container">
+      <h3 class="text-center mb-4">Submit Your API Link</h3>
+      <form id="apiForm">
+        <div class="mb-3">
+          <label for="apiLink" class="form-label">API Link</label>
+          <input type="url" class="form-control" id="apiLink" placeholder="Enter your API link" required>
+        </div>
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-submit btn-lg">Submit</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="result-container" id="resultContainer">
+      <h5>API Response:</h5>
+      <pre id="apiResult"></pre>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('apiForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      
+      const apiUrl = document.getElementById('apiLink').value;
+      const resultContainer = document.getElementById('resultContainer');
+      const apiResult = document.getElementById('apiResult');
+      
+      // Fetch data from the API link
+      fetch(apiUrl)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json(); // Assuming API returns JSON
+        })
+        .then(data => {
+          // Display the result in the result container
+          resultContainer.style.display = 'block';
+          apiResult.textContent = JSON.stringify(data, null, 2); // Format JSON nicely
+        })
+        .catch(error => {
+          resultContainer.style.display = 'block';
+          apiResult.textContent = `Error: ${error.message}`;
+        });
+    });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
